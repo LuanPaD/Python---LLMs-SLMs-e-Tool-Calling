@@ -1,3 +1,15 @@
+import unicodedata
+
+
+def normalizar_texto(texto: str):
+    texto_sem_acentos = "".join(
+        caractere
+        for caractere in unicodedata.normalize("NFD", texto.lower())
+        if unicodedata.category(caractere) != "Mn"
+    )
+    return " ".join(texto_sem_acentos.strip().split())
+
+
 def buscar_clima(cidade: str):
     clima = {
         "sao paulo": "24°C e nublado",
@@ -5,7 +17,7 @@ def buscar_clima(cidade: str):
         "curitiba": "18°C e chuvoso"
     }
 
-    chave = cidade.lower().strip()
+    chave = normalizar_texto(cidade)
     previsao = clima.get(chave)
 
     if previsao:
